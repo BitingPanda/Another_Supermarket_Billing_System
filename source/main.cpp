@@ -1,5 +1,6 @@
 #include <iostream>
 #include<fstream>
+#include<cctype>
 
 using namespace std;
 
@@ -42,13 +43,14 @@ void shopping :: menu()
     cout<<"\t\t\t\t|    2) Buyer"<<endl; 
     cout<<"\t\t\t\t|    3) Exit"<<endl<<endl;
     cout<<"\t\t\t\t|    Please Select"<<endl;
+    cout<<endl<<endl;
 
     cin>>choice;
 
     switch(choice)
     {
         case 1:
-            cout<<"\t\t\t Please Login"<<endl;
+            cout<<"\t\t\t Please Login"<<endl<<endl;
             cout<<"\t\t\t Enter Email"<<endl;
             cin>>email;
             cout<<endl<<"\t\t\t Enter Password"<<endl;
@@ -66,6 +68,11 @@ void shopping :: menu()
         case 2:
         {
             buyer();
+        }
+
+        case 3:
+        {
+            exit(0);
         }
 
         default:
@@ -86,6 +93,8 @@ void shopping::administrator()
     cout<<"\t\t\t| 2) Modify the product"<<endl;
     cout<<"\t\t\t| 3) Delete the the product"<<endl;
     cout<<"\t\t\t| 4) Back to the main menu"<<endl;
+
+    cin>>choice;
 
     switch(choice)
     {
@@ -143,18 +152,18 @@ void shopping::add()
     string n;
 
     cout<<endl<<endl<<endl<<"\t\t\t Add a new product";
-    cout<<endl<<endl<<"\t Product code of your product";
+    cout<<endl<<endl<<"\t Product code of your product: ";
     cin>>product_code;
-    cout<<endl<<endl<<"Name of the product";
+    cout<<endl<<endl<<"Name of the product: ";
     cin>>product_name;
-    cout<<endl<<endl<<"\tPrice of the product";
+    cout<<endl<<endl<<"\tPrice of the product: ";
     cin>>price;
-    cout<<endl<<endl<<"\t Discount on product";
+    cout<<endl<<endl<<"\t Discount on product: ";
     cin>>dis;
 
-    data.open("Database.txt",ios::in);
+    data.open("database.txt",ios::app|ios::out);
 
-    if (!data)
+    if (data.is_open())
     {
         data.open("database.txt, ios::app|ios::out");
         data<<" "<<product_code<<" "<<product_name<<" "<<price<<" "<<dis<<endl;
@@ -164,9 +173,9 @@ void shopping::add()
     else{
         data>>c>>n>>p>>d;
 
-        while (!data.eof())
+        while (!data.eof()) 
         {
-            if(c== product_code)
+            if(c == product_code)
             {
                 token++;
             }
@@ -177,7 +186,7 @@ void shopping::add()
 
     if(token == 1)
     {
-        goto m;
+        shopping::add();
     }
 
     else
@@ -361,7 +370,7 @@ void shopping:: receipt()
             cout<<endl<<endl<<"Do you want to buy another product? Y/N";
             cin>>choice;
         }
-        while(choice == 'y');
+        while(tolower(choice) == 'y');
 
         cout<<endl<<endl<<"\t\t\t____________________Recipt____________________"<<endl;
         cout<<endl<<"Product No.\t Product Quantity\t Price\t Amount\t Amount with Discount"<<endl;
